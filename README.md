@@ -1,4 +1,4 @@
-# CNC Simulator
+# 3-Axis CNC G-Code Simulator
 
 ## [CLICK HERE TO TRY NOW!](https://raw.githack.com/Harvie/cnc-simulator/master/index.html)
 
