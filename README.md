@@ -12,7 +12,9 @@ It was later dissected and modified to be useful in offline/standalone context b
 Similar project used to be available at www.cncwebtools.com/Apps/GCode_Simulator/index.html but features were limited and it's now defunct.
 
 ### TODO
+ * Pass settings and G-Code via URL
  * Animation play/pause button
+ * Support for mm/inch (bit settings and G21, G20)
  * Support for arcs (G02, G03)
  * Support for ball nose and radiused milling bits
 
