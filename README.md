@@ -5,8 +5,9 @@
 ### Origins
 This simulator was originaly part of [JSCut](https://jscut.org/) CAM package by [Todd Fleming](https://github.com/tbfleming/jscut).
 It was later dissected and modified to be useful in offline/standalone context by [Tomas Mudrunka](https://github.com/harvie).
- 
+Similar project used to be available at http://www.cncwebtools.com/Apps/GCode_Simulator/index.html but features were limited and it's now defunct.
 
 ### See also
+ * https://camotics.org/
  * https://github.com/vlachoudis/bCNC
  * https://github.com/LaserWeb/LaserWeb4
