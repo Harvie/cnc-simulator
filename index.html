@@ -37,6 +37,7 @@ function set_time() {
 	timeSliderElement = $('#timeSlider');
 	renderPath.setStopAtTime(timeSliderElement.val() / timeSliderElement.attr("max") * renderPath.totalTime);
 	document.getElementById('timeDisplay').innerHTML = (Math.round(timeSliderElement.val() / timeSliderElement.attr("max") * renderPath.totalTime) + 's');
+	//document.getElementById('timeTotDisplay').innerHTML = renderPath.totalTime + 's';
 }
 
 function loadfile() {

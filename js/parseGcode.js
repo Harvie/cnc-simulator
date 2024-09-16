@@ -91,7 +91,7 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
 	            path.push(lastX);
         	    path.push(lastY);
             	    path.push(lastZ);
-            	    path.push(lastF);
+            	    path.push(lastF || 1000);
 
 
       } else if (g == 2 || g == 3) { //Arc or Circle
@@ -135,7 +135,7 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
         	path.push(interpX);
         	path.push(interpY);
         	path.push(interpZ);  //FIXME: Assuming Z remains constant for the arc
-        	path.push(lastF); //Ignore F
+        	path.push(lastF || 1000);
     	}
 
     	// Update last position to final arc endpoint
