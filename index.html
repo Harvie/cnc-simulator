@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    <script src="lib/jquery-2.1.1.min.js"></script>
     <link href="lib/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="lib/bootstrap-slider.min.css" rel="stylesheet">
-    <script src="lib/jquery-2.1.1.min.js"></script>
     <script src="lib/bootstrap-3.1.1/js/bootstrap.min.js"></script>
+    <script src="lib/bootstrap-slider.min.js"></script>
     <script src="lib/gl-matrix-2.2.0-min.js"></script>
     <script src="lib/webgl-utils.js"></script>
-    <script src="lib/bootstrap-slider.min.js"></script>
     <script src="js/parseGcode.js"></script>
     <script src="js/RenderPath.js"></script>
     <script>
@@ -46,10 +46,11 @@ function loadfile() {
 		<div style="float: left; width: 70%; height: 100vh; text-align: center;">
                     <canvas id="renderPathCanvas" style="border: none; display: block; width: 100%; height: 90%;"></canvas><br /><br />
                     TIME: <input id="timeSlider" type="text" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="1000" style="width: 90%;" />
+			<!-- input type="range" min="0" max="1000" value="1000" class="slider" id="timeSlider" style="width: 90%;" / -->>
 		</div>
 <div style="float: right; width: 28%; height: 100vh;">
 <h2><a href="https://github.com/harvie/cnc-simulator">3-Axis CNC G-Code Simulator</a></h2>
-<table>
+<table style="width: 100%;">
 <tr><td>Diameter:</td><td><input id="cutterDia" type="number" value="3.175"></td></tr>
 <tr><td>Angle:</td><td><input id="cutterAngle" type="number" value="180"></td></tr>
 <tr><td>Height:</td><td><input id="cutterHeight" type="number" value="50"></td></tr>
@@ -63,7 +64,9 @@ G1 Z-3 F20
 G1 X10 Y10 F40
 </textarea><br />
 <input id="myFile" type="file" onchange="loadfile();" style="float: left;" />
-<button onclick="simulate()" style="float:right;"><b>SIMULATE</b></button> 
+<button onclick="simulate()" style="float:right;"><b>SIMULATE</b></button>
+<br /><br />
+© Todd Fleming 2014, Tomas Mudrunka 2024
 </div>
 
 </body>
