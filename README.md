@@ -1,5 +1,7 @@
 # 3-Axis CNC G-Code Simulator
 
+![Screenshot Suzanne](screenshot.jpg)
+
 ## [CLICK HERE TO TRY NOW!](https://raw.githack.com/Harvie/cnc-simulator/master/index.html)
 
 ### Origins
