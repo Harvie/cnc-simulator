@@ -13,6 +13,7 @@ Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/G
 
 ### TODO
  * Pass settings and G-Code via URL
+ * Figure out why viewport is always square (cannot properly fill non-square rectangles)
  * 3D view zooming and translating
  * Support for mm/inch (bit settings and G21, G20)
  * Support for arcs (G02, G03)
