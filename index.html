@@ -38,6 +38,18 @@ function loadfile() {
 	reader.readAsText(document.getElementById("myFile").files[0]);
 }
 
+var anim;
+function animate_next() {
+	slider = document.getElementById("timeSlider");
+	slider.value = Number(slider.value)+30;
+	if(slider.value >= 10000) slider.value=0;
+	slider.dispatchEvent(new Event('change'));
+}
+function animatec() {
+	if(!anim) anim = setInterval(animate_next, 100);
+	else { clearInterval(anim); anim=undefined; }
+}
+
     </script>
 	<style>
 		* { font-family: Helvetica, sans-serif; }
@@ -68,6 +80,7 @@ G0 Z3
 </textarea><br />
 <input id="myFile" type="file" onchange="loadfile();" style="float: left;" />
 <button onclick="simulate()" style="float:right;"><b>SIMULATE</b></button>
+<button onclick="animatec()" style="float:right;">ANIMATE</button>
 <br /><br />
 © Todd Fleming 2014, Tomas Mudrunka 2024
 </div>
