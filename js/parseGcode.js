@@ -37,8 +37,8 @@ jscut.parseGcode = function (options, gcode) {
                 ++i;
             return Number(gcode.substr(begin, i - begin));
         }
-        var g = NaN, x = NaN, y = NaN, z = NaN, f = NaN;
-        while (i < gcode.length && gcode[i] != ';' && gcode[i] != '\r' && gcode[i] != '\n') {
+        var g = NaN, x = NaN, y = NaN, z = NaN, f = NaN, I = NaN, J = NaN, K = NaN, R = NaN;
+        while (i < gcode.length && gcode[i] != ';' && gcode[i] != '\r' && gcode[i] != '\n' && gcode[i] != '(') {
             if (gcode[i] == 'G' || gcode[i] == 'g')
                 g = parse();
             else if (gcode[i] == 'X' || gcode[i] == 'x')
@@ -49,10 +49,22 @@ jscut.parseGcode = function (options, gcode) {
                 z = parse();
             else if (gcode[i] == 'F' || gcode[i] == 'f')
                 f = parse();
+            else if (gcode[i] == 'I' || gcode[i] == 'i')
+                I = parse();
+            else if (gcode[i] == 'J' || gcode[i] == 'j')
+                J = parse();
+            else if (gcode[i] == 'K' || gcode[i] == 'k')
+                K = parse();
+            else if (gcode[i] == 'R' || gcode[i] == 'r')
+                R = parse();
             else
                 ++i;
         }
-        if (g == 0 || g == 1) {
+        if (g == 0 || g == 1 || g==2 || g==3) {
+		if(g == 2 || g == 3) {
+			console.log("G2/G3 not implemented, replacing ARC with single line!");
+		}
+
             if (!isNaN(x)) {
                 if (isNaN(lastX))
                     for (var j = 0; j < path.length; j += stride)
