@@ -8,5 +8,5 @@ It was later dissected and modified to be useful in offline/standalone context b
  
 
 ### See also
- * https://github.com/vlachoudis/bCNC/
+ * https://github.com/vlachoudis/bCNC
  * https://github.com/LaserWeb/LaserWeb4
