@@ -11,12 +11,18 @@ During 2024-09 it was isolated and modified to be useful in offline/standalone c
 
 Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/GCode_Simulator/index.html but features were limited and the website is defunct since 2020-08.
 
+### Features
+ * Load g-code from file
+ * Support for arcs (G02, G03, IJ only)
+ * Animation
+ * Works offline (no webserver needed)
+ * V-Carving
+
 ### TODO
  * Pass settings and G-Code via URL
  * Figure out why viewport is always square (cannot properly fill non-square rectangles)
  * 3D view zooming and translating
  * Support for mm/inch (bit settings and G21, G20)
- * Support for arcs (G02, G03)
  * Support for ball nose and radiused milling bits
  * Tool library and toolchanges (eg. T1 M6)
 
