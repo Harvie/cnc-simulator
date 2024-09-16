@@ -9,7 +9,7 @@ This simulator was part of [JSCut](https://jscut.org/) discontinued CAM package 
 
 During 2024-09 it was isolated and modified to be useful in offline/standalone context by [Tomas Mudrunka](https://github.com/harvie).
 
-Similar project used to be available at www.cncwebtools.com/Apps/GCode_Simulator/index.html but features were limited and the website is defunct since 2020-08.
+Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/GCode_Simulator/index.html but features were limited and the website is defunct since 2020-08.
 
 ### TODO
  * Pass settings and G-Code via URL
