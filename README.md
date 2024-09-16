@@ -5,11 +5,11 @@
 ## [CLICK HERE TO TRY NOW!](https://raw.githack.com/Harvie/cnc-simulator/master/index.html)
 
 ### Origins
-This simulator was originaly part of [JSCut](https://jscut.org/) CAM package by [Todd Fleming](https://github.com/tbfleming/jscut).
+This simulator was originaly part of [JSCut](https://jscut.org/) discontinued CAM package by [Todd Fleming](https://github.com/tbfleming/jscut).
 
-It was later dissected and modified to be useful in offline/standalone context by [Tomas Mudrunka](https://github.com/harvie).
+It was later isolated and modified to be useful in offline/standalone context by [Tomas Mudrunka](https://github.com/harvie).
 
-Similar project used to be available at www.cncwebtools.com/Apps/GCode_Simulator/index.html but features were limited and it's now defunct.
+Similar project used to be available at www.cncwebtools.com/Apps/GCode_Simulator/index.html but features were limited and the website is now defunct.
 
 ### TODO
  * Pass settings and G-Code via URL
