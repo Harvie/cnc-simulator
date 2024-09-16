@@ -1017,17 +1017,19 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
 
 function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
     var renderPath;
-    var timeSlider;
 
+    /* Show selected time
+    var timeSlider;
     if (timeSliderElement)
         timeSlider = timeSliderElement.slider({
             formater: function (value) {
                 if (renderPath)
-                    return 'Time: ' + Math.round(value / 1000 * renderPath.totalTime) + 's';
+                    return 'Time: ' + Math.round(value / timeSliderElement.attr("max") * renderPath.totalTime) + 's';
                 else
                     return value;
             }
         });
+    */
 
     renderPath = new RenderPath(options, canvas, shaderDir, function (renderPath) {
         renderPath.fillPathBuffer([], 0, 0, 180, 0);
@@ -1058,9 +1060,10 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
             mouseDown = false;
         });
 
-        if (timeSlider)
-            timeSlider.on('slide', function () {
-                renderPath.setStopAtTime(timeSlider.val() / 1000 * renderPath.totalTime);
+        if (timeSliderElement)
+            timeSliderElement.on("input change",  function () {
+		//alarm("change!");
+                renderPath.setStopAtTime(timeSliderElement.val() / timeSliderElement.attr("max") * renderPath.totalTime);
             });
 
         ready(renderPath);

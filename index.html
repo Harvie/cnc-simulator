@@ -7,10 +7,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <script src="lib/jquery-2.1.1.min.js"></script>
+<!--
     <link href="lib/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="lib/bootstrap-slider.min.css" rel="stylesheet">
     <script src="lib/bootstrap-3.1.1/js/bootstrap.min.js"></script>
     <script src="lib/bootstrap-slider.min.js"></script>
+-->
     <script src="lib/gl-matrix-2.2.0-min.js"></script>
     <script src="lib/webgl-utils.js"></script>
     <script src="js/parseGcode.js"></script>
@@ -38,17 +40,18 @@ function loadfile() {
 
     </script>
 	<style>
+		// html, body: { padding: 0 0 0 0; margin: 0 0 0 0; }
 		// div { border: 3px solid blue; }
 	</style>
 </head>
 <body onload="simulate();">
 
-		<div style="float: left; width: 70%; height: 100vh; text-align: center;">
-                    <canvas id="renderPathCanvas" style="border: none; display: block; width: 100%; height: 90%;"></canvas><br /><br />
-                    TIME: <input id="timeSlider" type="text" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="1000" style="width: 90%;" />
-			<!-- input type="range" min="0" max="1000" value="1000" class="slider" id="timeSlider" style="width: 90%;" / -->>
+		<div style="float: left; width: 70%; height: 97vh; text-align: left;">
+                    <canvas id="renderPathCanvas" style="border: none; display: block; width: 100%; height: 92%;"></canvas><br /><br />
+                    TIME:<input type="range" min="0" max="1000" value="1000" class="slider" id="timeSlider" style="width: 92%;" />
+			<!-- input id="timeSlider" type="text" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="1000" style="width: 90%;" / -->
 		</div>
-<div style="float: right; width: 28%; height: 100vh;">
+<div style="float: right; width: 28%; height: 97vh;">
 <h2><a href="https://github.com/harvie/cnc-simulator">3-Axis CNC G-Code Simulator</a></h2>
 <table style="width: 100%;">
 <tr><td>Diameter:</td><td><input id="cutterDia" type="number" value="3.175"></td></tr>
@@ -56,7 +59,7 @@ function loadfile() {
 <tr><td>Height:</td><td><input id="cutterHeight" type="number" value="50"></td></tr>
 <tr><td>Surface Z:</td><td><input id="surfaceZ" type="number" value="0"></td></tr>
 </table>
-<br><textarea id="gcodeText" style="width: 100%; height: 70vh;">
+<br><textarea id="gcodeText" style="width: 100%; height: 66vh;">
 G1 Z0.1 F100
 G1 X0 Y0 F100
 G1 Z0.0000
