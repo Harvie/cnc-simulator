@@ -11,6 +11,11 @@ It was later dissected and modified to be useful in offline/standalone context b
 
 Similar project used to be available at www.cncwebtools.com/Apps/GCode_Simulator/index.html but features were limited and it's now defunct.
 
+### TODO
+ * Animation play/pause button
+ * Support for arcs (G02, G03)
+ * Support for ball nose and radiused milling bits
+
 ### See also
  * https://camotics.org/
  * https://github.com/vlachoudis/bCNC
