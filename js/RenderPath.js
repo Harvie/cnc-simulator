@@ -226,6 +226,7 @@ void main(void) {
     vec3 p2 = getPos(pos2);
     vec3 tp = getPos(thisPos);
 
+    //STOCK MATERIAL COLORS
     vec4 topColor = vec4(1.0, 1.0, 1.0, 1.0);
     vec4 botColor = vec4(0.0, 0.0, 1.0, 1.0);
     vec4 transitionColor = vec4(0.0, 0.0, 0.0, 1.0);
