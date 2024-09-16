@@ -1060,11 +1060,13 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
             mouseDown = false;
         });
 
+	/*
         if (timeSliderElement)
             timeSliderElement.on("input change",  function () {
 		//alarm("change!");
                 renderPath.setStopAtTime(timeSliderElement.val() / timeSliderElement.attr("max") * renderPath.totalTime);
             });
+	*/
 
         ready(renderPath);
     });
