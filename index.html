@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>3-Axis CNC Mill G-Code Simulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="lib/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/bootstrap-slider.min.css" rel="stylesheet">
+    <script src="lib/jquery-2.1.1.min.js"></script>
+    <script src="lib/bootstrap-3.1.1/js/bootstrap.min.js"></script>
+    <script src="lib/gl-matrix-2.2.0-min.js"></script>
+    <script src="lib/webgl-utils.js"></script>
+    <script src="lib/bootstrap-slider.min.js"></script>
+    <script src="js/parseGcode.js"></script>
+    <script src="js/RenderPath.js"></script>
+    <script>
+function simulate() {
+    var renderPath;
+    renderPath = startRenderPath({}, $("#renderPathCanvas")[0], $('#timeSlider'), 'js', function (renderPath) {
+            renderPath.fillPathBuffer(jscut.parseGcode({}, $('textarea#gcodeText').val()), $('input#surfaceZ').val(), $('input#cutterDia').val(), $('input#cutterAngle').val(), $('input#cutterHeight').val());
+    });
+}
+
+function loadfile() {
+	var reader = new FileReader();
+	reader.onload = function (e) {
+    		document.getElementById("gcodeText").value = e.target.result;
+		simulate();
+	};
+	reader.readAsText(document.getElementById("myFile").files[0]);
+}
+
+    </script>
+</head>
+<body onload="simulate();">
+                    <h2>
+                        GCODE simulation demo
+                    </h2>
+
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="jumbotron">
+                    <canvas id="renderPathCanvas" style="border: none;" width="512" height="512"></canvas>
+                    <br />
+                    <br />
+                    <input id="timeSlider" type="text" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="1000" />
+
+<br>Diameter: <input id="cutterDia" type="number" value="3.175">
+<br>Angle: <input id="cutterAngle" type="number" value="180">
+<br>Height: <input id="cutterHeight" type="number" value="50">
+<br>Surface Z: <input id="surfaceZ" type="number" value="0">
+<br><textarea id="gcodeText" rows="20" cols="60">
+G1 Z0.1 F100
+G1 X0 Y0 F100
+G1 Z0.0000
+G1 Z-3 F20
+G1 X10 Y10 F40
+</textarea>
+<button onclick="simulate()">Simulate</button> 
+<input id="myFile" type="file" onchange="loadfile();" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
