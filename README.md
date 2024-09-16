@@ -1,11 +1,11 @@
 # CNC Simulator
 
-Try me now:
-https://raw.githack.com/Harvie/cnc-simulator/master/index.html
+## [CLICK HERE TO TRY NOW!](https://raw.githack.com/Harvie/cnc-simulator/master/index.html)
 
-This simulator was originaly part of JSCut CAM package
-https://jscut.org/ https://github.com/tbfleming/jscut
-It was dissected and changed to be useful in standalone context
+### Origins
+This simulator was originaly part of [JSCut](https://jscut.org/) CAM package by [Todd Fleming](https://github.com/tbfleming/jscut).
+It was later dissected and modified to be useful in offline/standalone context by [Tomas Mudrunka](https://github.com/harvie).
+ 
 
-### See also:
+### See also
  * https://github.com/vlachoudis/bCNC/
