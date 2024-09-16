@@ -1,10 +1,8 @@
 # Lightweight 3-Axis CNC G-Code Simulator
 
-<p style="text-align:center;">
 ![Screenshot Suzanne](screenshot.jpg)
 
 ## [CLICK HERE TO TRY NOW!](https://harvie.github.io/cnc-simulator)
-</p>
 
 ### Origins
 This simulator was part of [JSCut](https://jscut.org/) discontinued CAM package which was developed since 2014 by [Todd Fleming](https://github.com/tbfleming/jscut).
