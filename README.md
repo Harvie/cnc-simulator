@@ -18,6 +18,7 @@ Similar project used to be available at www.cncwebtools.com/Apps/GCode_Simulator
  * Support for mm/inch (bit settings and G21, G20)
  * Support for arcs (G02, G03)
  * Support for ball nose and radiused milling bits
+ * Tool library and toolchanges (eg. T1 M6)
 
 ### See also
  * https://camotics.org/
