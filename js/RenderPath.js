@@ -226,7 +226,7 @@ void main(void) {
     vec3 p2 = getPos(pos2);
     vec3 tp = getPos(thisPos);
 
-    //STOCK MATERIAL COLORS
+    //COLOR OF STOCK MATERIAL
     vec4 topColor = vec4(1.0, 1.0, 1.0, 1.0);
     vec4 botColor = vec4(0.0, 0.0, 1.0, 1.0);
     vec4 transitionColor = vec4(0.0, 0.0, 0.0, 1.0);
@@ -827,7 +827,7 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
         var numTriangles = numDivisions * 4;
         cylNumVertexes = numTriangles * 3;
         var bufferContent = new Float32Array(cylNumVertexes * cylStride);
-        var r = 0.7, g = 0.7, b = 0.0;
+        var r = 0.7, g = 0.7, b = 0.0; //COLOR OF CUTTER BIT
 
         var pos = 0;
         function addVertex(x, y, z) {
