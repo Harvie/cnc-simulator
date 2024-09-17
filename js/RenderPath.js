@@ -848,25 +848,42 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
             var x = .5 * Math.cos(j * 2 * Math.PI / numDivisions);
             var y = .5 * Math.sin(j * 2 * Math.PI / numDivisions);
 
-            //Side (upper)
-            addVertex(lastX, lastY, 0);
-            addVertex(x, y, 0);
-            addVertex(lastX, lastY, 1);
+            if(self.isVBit) { //FIXME: this condition is never met!
+                //Side (upper)
+                addVertex(0, 0, 0);
+                addVertex(0, 0, 0);
+                addVertex(lastX, lastY, 1);
 
-            //Side (lower)
-            addVertex(x, y, 0);
-            addVertex(x, y, 1);
-            addVertex(lastX, lastY, 1);
+                //Side (lower)
+                addVertex(0, 0, 0);
+                addVertex(x, y, 1);
+                addVertex(lastX, lastY, 1);
 
-            //Tip of the cutter
-            addVertex(0, 0, 0);
-            addVertex(x, y, 0);
-            addVertex(lastX, lastY, 0);
+                //Top of the cutter shank
+                addVertex(0, 0, 1);
+                addVertex(lastX, lastY, 1);
+                addVertex(x, y, 1);
+            } else {
+                //Side (upper)
+                addVertex(lastX, lastY, 0);
+                addVertex(x, y, 0);
+                addVertex(lastX, lastY, 1);
 
-            //Top of the cutter shank
-            addVertex(0, 0, 1);
-            addVertex(lastX, lastY, 1);
-            addVertex(x, y, 1);
+                //Side (lower)
+                addVertex(x, y, 0);
+                addVertex(x, y, 1);
+                addVertex(lastX, lastY, 1);
+
+                //Tip of the cutter
+                addVertex(0, 0, 0);
+                addVertex(x, y, 0);
+                addVertex(lastX, lastY, 0);
+
+                //Top of the cutter shank
+                addVertex(0, 0, 1);
+                addVertex(lastX, lastY, 1);
+                addVertex(x, y, 1);
+            }
 
             lastX = x;
             lastY = y;
