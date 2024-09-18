@@ -63,6 +63,21 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
                 ++i;
         }
 
+        if (g >= 0 && g <= 3) {
+            if (!isNaN(z)) {
+                if (isNaN(lastZ))
+                    for (var j = 2; j < path.length; j += stride)
+                        path[j] = z;
+                lastZ = z;
+            }
+            if (!isNaN(f)) {
+                if (isNaN(lastF))
+                    for (var j = 3; j < path.length; j += stride)
+                        path[j] = f;
+                lastF = f;
+            }
+	}
+
         if (g == 0 || g == 1) { //Straight line
             if (!isNaN(x)) {
                 if (isNaN(lastX))
@@ -76,25 +91,13 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
                         path[j] = y;
                 lastY = y;
             }
-            if (!isNaN(z)) {
-                if (isNaN(lastZ))
-                    for (var j = 2; j < path.length; j += stride)
-                        path[j] = z;
-                lastZ = z;
-            }
-            if (!isNaN(f)) {
-                if (isNaN(lastF))
-                    for (var j = 3; j < path.length; j += stride)
-                        path[j] = f;
-                lastF = f;
-            }
 	            path.push(lastX);
         	    path.push(lastY);
             	    path.push(lastZ);
             	    path.push(lastF || 1000);
 
 
-      } else if (g == 2 || g == 3) { //Arc or Circle
+        } else if (g == 2 || g == 3) { //Arc or Circle
 
     		//console.log("LAST: X" + lastX + " Y" + lastY + " Z" + lastZ);
     		//console.log("G" + g + " X" + x + " Y" + y + " Z" + z + " I" + I + " J" + J + " K" + K + " R" + R);
@@ -102,6 +105,7 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
 		if(!isNaN(R) || !isNaN(K)) console.log("G02/G03 K and R are not supported. Only I and J can be used for now.")
 		if(isNaN(I) && !isNaN(J)) I=0;
 		if(isNaN(J) && !isNaN(I)) J=0;
+		if(isNaN(z)) z=lastZ;
 
     		var clockwise = (g == 2);
     		var centerX = lastX + I;
@@ -128,6 +132,7 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
         	var interpX = centerX + radius * Math.cos(currentAngle);  // Interpolated X
         	var interpY = centerY + radius * Math.sin(currentAngle);  // Interpolated Y
 		var interpZ = lastZ + ((z-lastZ)*i)/steps;
+		//console.log("IZ:"+interpZ+" lZ:"+lastZ+" z:"+z+" i:"+i+" s:"+steps);
 		if(isNaN(interpZ)) interpZ=lastZ;
 
         	// Add interpolated point to the path
