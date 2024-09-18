@@ -283,6 +283,7 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
     var cutterAngleRad = (cutterAngle * Math.PI / 180) || Math.PI;
     var isVBit = cutterAngle < 180;
     cutterH = cutterH || 10;
+    if(isVBit) cutterH = (cutterDia/2)/Math.tan(cutterAngleRad/2); //Calculate corect cone height given radius and angle
 
     var pathXOffset = 0;
     var pathYOffset = 0;
