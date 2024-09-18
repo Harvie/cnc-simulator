@@ -64,12 +64,6 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
         }
 
         if (g >= 0 && g <= 3) {
-            if (!isNaN(z)) {
-                if (isNaN(lastZ))
-                    for (var j = 2; j < path.length; j += stride)
-                        path[j] = z;
-                lastZ = z;
-            }
             if (!isNaN(f)) {
                 if (isNaN(lastF))
                     for (var j = 3; j < path.length; j += stride)
@@ -91,6 +85,13 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
                         path[j] = y;
                 lastY = y;
             }
+            if (!isNaN(z)) {
+                if (isNaN(lastZ))
+                    for (var j = 2; j < path.length; j += stride)
+                        path[j] = z;
+                lastZ = z;
+            }
+
 	            path.push(lastX);
         	    path.push(lastY);
             	    path.push(lastZ);
