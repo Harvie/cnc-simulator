@@ -289,7 +289,6 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
     var pathYOffset = 0;
     var pathScale = 1;
     var pathMinZ = -1;
-    var pathTopZ = 0;
     var stopAtTime = 9999999;
     var rotate = mat4.create();
 
