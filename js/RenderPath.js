@@ -266,7 +266,7 @@ void main(void) {
 `;
 
 
-function RenderPath(options, canvas, shaderDir, shadersReady) {
+function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle, cutterH, shadersReady) {
     "use strict";
     var self = this;
 
@@ -276,10 +276,14 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
 
     var gpuMem = 2 * 1024 * 1024;
     var resolution = 1024;
-    var cutterDia = .125;
-    var cutterAngleRad = Math.PI;
-    var isVBit = false;
-    var cutterH = 0;
+
+    pathTopZ = pathTopZ || 0;
+    cutterDia = cutterDia || .125;
+    if(!cutterAngle || cutterAngle <= 0 || cutterAngle > 180) cutterAngle = 180;
+    var cutterAngleRad = (cutterAngle * Math.PI / 180) || Math.PI;
+    var isVBit = cutterAngle < 180;
+    cutterH = cutterH || 10;
+
     var pathXOffset = 0;
     var pathYOffset = 0;
     var pathScale = 1;
@@ -414,7 +418,7 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
     var pathNumVertexes = 0;
     self.totalTime = 0;
 
-    self.fillPathBuffer = function (path, topZ, cutterDiameter, cutterAngle, cutterHeight) {
+    self.fillPathBuffer = function (path) {
         if (!rasterizePathProgram || !renderHeightMapProgram || !basicProgram)
             return;
 
@@ -422,13 +426,6 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
         if (options.profile)
             console.log("fillPathBuffer...");
 
-        pathTopZ = topZ;
-        cutterDia = cutterDiameter;
-        if (cutterAngle <= 0 || cutterAngle > 180)
-            cutterAngle = 180;
-        cutterAngleRad = cutterAngle * Math.PI / 180;
-        isVBit = cutterAngle < 180;
-        cutterH = cutterHeight;
         needToCreatePathTexture = true;
         requestFrame();
         var inputStride = 4;
@@ -1035,7 +1032,8 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
     }
 }
 
-function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
+function startRenderPath(options, canvas, timeSliderElement, shaderDir, parsed_gcode, pathTopZ, cutterDia, cutterAngle, cutterH, ready) {
+
     var renderPath;
 
     /* Show selected time
@@ -1051,7 +1049,7 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
         });
     */
 
-    renderPath = new RenderPath(options, canvas, shaderDir, function (renderPath) {
+    renderPath = new RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle, cutterH, function (renderPath) {
         renderPath.fillPathBuffer([], 0, 0, 180, 0);
 
         var mouseDown = false;
@@ -1088,17 +1086,9 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
             });
 	*/
 
-        ready(renderPath);
+        renderPath.fillPathBuffer(parsed_gcode);
+        if(ready) ready(renderPath);
     });
 
     return renderPath;
-}
-
-function startRenderPathDemo() {
-    var renderPath;
-    renderPath = startRenderPath({}, $("#renderPathCanvas")[0], $('#timeSlider'), 'js', function (renderPath) {
-        $.get("logo-gcode.txt", function (gcode) {
-            renderPath.fillPathBuffer(jscut.parseGcode({}, gcode), 0, .125, 180, 1);
-        });
-    });
 }

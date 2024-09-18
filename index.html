@@ -25,9 +25,9 @@ function simulate() {
 	canvas.width = canvas.offsetWidth;
 	canvas.height = canvas.offsetHeight;
 
-    renderPath = startRenderPath({}, $("#renderPathCanvas")[0], null, 'js', function (renderPath) {
-            renderPath.fillPathBuffer(jscut.parseGcode({}, $('textarea#gcodeText').val()), $('input#surfaceZ').val(), $('input#cutterDia').val(), $('input#cutterAngle').val(), $('input#cutterHeight').val());
-    });
+    renderPath = startRenderPath({}, $("#renderPathCanvas")[0], null, 'js', 
+            jscut.parseGcode({}, $('textarea#gcodeText').val()), $('input#surfaceZ').val(), $('input#cutterDia').val(), $('input#cutterAngle').val(), $('input#cutterHeight').val(), null
+    );
 	set_time();
 }
 window.addEventListener("resize", simulate);
