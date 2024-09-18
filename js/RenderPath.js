@@ -849,12 +849,7 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
             var y = .5 * Math.sin(j * 2 * Math.PI / numDivisions);
 
             if(isVBit) { //FIXME: this condition is never met!
-                //Side (upper)
-                addVertex(0, 0, 0);
-                addVertex(0, 0, 0);
-                addVertex(lastX, lastY, 1);
-
-                //Side (lower)
+                //Side
                 addVertex(0, 0, 0);
                 addVertex(x, y, 1);
                 addVertex(lastX, lastY, 1);
