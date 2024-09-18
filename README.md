@@ -13,13 +13,13 @@ Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/G
 
 ### Features
  * Load g-code from file
+ * Pass settings and G-Code via URL
  * Support for arcs (G02, G03, IJ only)
  * Animation
  * Works offline (no webserver needed)
  * V-Carving
 
 ### TODO
- * Pass settings and G-Code via URL
  * Figure out why viewport is always square (cannot properly fill non-square rectangles)
  * 3D view zooming and translating
  * Support for mm/inch (bit settings and G21, G20)

@@ -45,6 +45,7 @@ function loadfile() {
 	reader.onload = function (e) {
     		document.getElementById("gcodeText").value = e.target.result;
 		simulate();
+		config_changed();
 	};
 	reader.readAsText(document.getElementById("myFile").files[0]);
 }
@@ -59,14 +60,35 @@ function animate_next() {
 function animatec() {
 	if(!anim) anim = setInterval(animate_next, 100);
 	else { clearInterval(anim); anim=undefined; }
+	config_changed();
 }
 
-/*
 const hashParams = new URLSearchParams(window.location.hash.substring(1));
-alert(hashParams.get('dia'));
-hashParams.set('tomas', 3);
-window.location.hash=hashParams.toString();
-*/
+//alert(hashParams.get('gcode').length);
+function config_changed() {
+	hashParams.set('bd', $('input#cutterDia').val());
+	hashParams.set('ba', $('input#cutterAngle').val());
+	hashParams.set('bh', $('input#cutterHeight').val());
+	hashParams.set('sz', $('input#surfaceZ').val());
+	hashParams.set('an', Number(!!anim));
+	hashParams.delete('gcode');
+	//hashParams.set('gcode', $('textarea#gcodeText').val());
+	try {
+		window.location.hash=hashParams.toString()+"&gcode="+encodeURIComponent($('textarea#gcodeText').val());
+	} catch {
+		window.location.hash=hashParams.toString();
+	}
+}
+
+function parse_url() {
+	if(hashParams.get('bd')) $('input#cutterDia').val(hashParams.get('bd'));
+	if(hashParams.get('ba')) $('input#cutterAngle').val(hashParams.get('ba'));
+	if(hashParams.get('bh')) $('input#cutterHeight').val(hashParams.get('bh'));
+	if(hashParams.get('sz')) $('input#surfaceZ').val(hashParams.get('sz'));
+	if(hashParams.get('gcode')) $('textarea#gcodeText').val(hashParams.get('gcode'));
+	if(hashParams.get('an') && hashParams.get('an') == Number(!anim)) animatec();
+}
+
     </script>
 	<style>
 		* { font-family: Helvetica, sans-serif; }
@@ -74,7 +96,7 @@ window.location.hash=hashParams.toString();
 		// div { border: 3px solid blue; }
 	</style>
 </head>
-<body onload="simulate();">
+<body onload="parse_url(); simulate();">
 
 		<div style="float: left; width: 70%; height: 97vh; text-align: left;">
                     <canvas id="renderPathCanvas" style="border: none; display: block; width: 100%; height: 92%;"></canvas><br /><br />
@@ -84,12 +106,12 @@ window.location.hash=hashParams.toString();
 <div style="float: right; width: 28%; height: 97vh;">
 <h2><a href="https://github.com/harvie/cnc-simulator">3-Axis CNC G-Code Simulator</a></h2>
 <table style="width: 100%;">
-<tr><td>Bit Diameter:</td><td><input id="cutterDia" type="number" value="3.175"></td></tr>
-<tr><td>Bit Angle:</td><td><input id="cutterAngle" type="number" value="180"></td></tr>
-<tr><td>Bit Height:</td><td><input id="cutterHeight" type="number" value="50"></td></tr>
-<tr><td>Surface Z:</td><td><input id="surfaceZ" type="number" value="0"></td></tr>
+<tr><td>Bit Diameter:</td><td><input id="cutterDia" type="number" onchange="config_changed()" value="3.175"></td></tr>
+<tr><td>Bit Angle:</td><td><input id="cutterAngle" type="number" onchange="config_changed()" value="180"></td></tr>
+<tr><td>Bit Height:</td><td><input id="cutterHeight" type="number" onchange="config_changed()" value="50"></td></tr>
+<tr><td>Surface Z:</td><td><input id="surfaceZ" type="number" onchange="config_changed()" value="0"></td></tr>
 </table>
-<br><textarea id="gcodeText" style="width: 100%; height: 66vh;">
+<br><textarea id="gcodeText" style="width: 100%; height: 66vh;" onchange="config_changed()">
 G0 X0 Y0 Z3
 G1 Z0 F40
 G2 X10 Y10 I5 J5 Z-3
