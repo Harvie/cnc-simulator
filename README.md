@@ -20,6 +20,7 @@ Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/G
  * V-Carving
 
 ### TODO
+ * After calling simulate() the old instance is stuck somewhere while the new one is created
  * Figure out why viewport is always square (cannot properly fill non-square rectangles)
  * 3D view zooming and translating
  * Support for mm/inch (bit settings and G21, G20)
