@@ -76,6 +76,7 @@ function config_changed(gcode=false) {
 	window.location.hash=hashParams.toString();
 
 	if(gcode) try {
+		hashParams.delete('gurl');
 		window.location.hash=hashParams.toString()+"&gcode="+encodeURIComponent($('textarea#gcodeText').val());
 	} catch {
 		alert($('textarea#gcodeText').val().length+" bytes of G-Code is too long for URL!");
