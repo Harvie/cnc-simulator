@@ -70,7 +70,7 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
                         path[j] = f;
                 lastF = f;
             }
-	}
+        }
 
         if (g == 0 || g == 1) { //Straight line
             if (!isNaN(x)) {
@@ -92,63 +92,63 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
                 lastZ = z;
             }
 
-	            path.push(lastX);
-        	    path.push(lastY);
-            	    path.push(lastZ);
-            	    path.push(lastF || 1000);
+            path.push(lastX);
+            path.push(lastY);
+            path.push(lastZ);
+            path.push(lastF || 1000);
 
 
         } else if (g == 2 || g == 3) { //Arc or Circle
 
-    		//console.log("LAST: X" + lastX + " Y" + lastY + " Z" + lastZ);
-    		//console.log("G" + g + " X" + x + " Y" + y + " Z" + z + " I" + I + " J" + J + " K" + K + " R" + R);
+            //console.log("LAST: X" + lastX + " Y" + lastY + " Z" + lastZ);
+            //console.log("G" + g + " X" + x + " Y" + y + " Z" + z + " I" + I + " J" + J + " K" + K + " R" + R);
 
-		if(!isNaN(R) || !isNaN(K)) console.log("G02/G03 K and R are not supported. Only I and J can be used for now.")
-		if(isNaN(I) && !isNaN(J)) I=0;
-		if(isNaN(J) && !isNaN(I)) J=0;
-		if(isNaN(z)) z=lastZ;
+            if (!isNaN(R) || !isNaN(K)) console.log("G02/G03 K and R are not supported. Only I and J can be used for now.")
+            if (isNaN(I) && !isNaN(J)) I = 0;
+            if (isNaN(J) && !isNaN(I)) J = 0;
+            if (isNaN(z)) z = lastZ;
 
-    		var clockwise = (g == 2);
-    		var centerX = lastX + I;
-    		var centerY = lastY + J;
-    		//var centerZ = lastZ + K;
-    		var radius = Math.sqrt(Math.pow(lastX - centerX, 2) + Math.pow(lastY - centerY, 2));
+            var clockwise = (g == 2);
+            var centerX = lastX + I;
+            var centerY = lastY + J;
+            //var centerZ = lastZ + K;
+            var radius = Math.sqrt(Math.pow(lastX - centerX, 2) + Math.pow(lastY - centerY, 2));
 
-    		var startAngle = Math.atan2(lastY - centerY, lastX - centerX);
-    		var endAngle = Math.atan2(y - centerY, x - centerX);
+            var startAngle = Math.atan2(lastY - centerY, lastX - centerX);
+            var endAngle = Math.atan2(y - centerY, x - centerX);
 
-    	// Correct the angle difference based on the direction of the arc
-    	let angleDiff = endAngle - startAngle;
-    	if (clockwise) {
-        	if (angleDiff >= 0) angleDiff -= 2 * Math.PI;  // Ensure the angle is negative for clockwise
-    	} else {
-        	if (angleDiff <= 0) angleDiff += 2 * Math.PI;  // Ensure the angle is positive for counterclockwise
-    	}
+            // Correct the angle difference based on the direction of the arc
+            let angleDiff = endAngle - startAngle;
+            if (clockwise) {
+                if (angleDiff >= 0) angleDiff -= 2 * Math.PI;  // Ensure the angle is negative for clockwise
+            } else {
+                if (angleDiff <= 0) angleDiff += 2 * Math.PI;  // Ensure the angle is positive for counterclockwise
+            }
 
-    	var arcLength = Math.abs(angleDiff * radius);  // Arc length based on angle
-    	var steps = Math.ceil(arcLength / arcPrecision);  // Number of steps based on precision
+            var arcLength = Math.abs(angleDiff * radius);  // Arc length based on angle
+            var steps = Math.ceil(arcLength / arcPrecision);  // Number of steps based on precision
 
-    	for (let i = 1; i <= steps; i++) {
-        	var currentAngle = startAngle + (angleDiff * i) / steps;
-        	var interpX = centerX + radius * Math.cos(currentAngle);  // Interpolated X
-        	var interpY = centerY + radius * Math.sin(currentAngle);  // Interpolated Y
-		var interpZ = lastZ + ((z-lastZ)*i)/steps;
-		//console.log("IZ:"+interpZ+" lZ:"+lastZ+" z:"+z+" i:"+i+" s:"+steps);
-		if(isNaN(interpZ)) interpZ=lastZ;
+            for (let i = 1; i <= steps; i++) {
+                var currentAngle = startAngle + (angleDiff * i) / steps;
+                var interpX = centerX + radius * Math.cos(currentAngle);  // Interpolated X
+                var interpY = centerY + radius * Math.sin(currentAngle);  // Interpolated Y
+                var interpZ = lastZ + ((z - lastZ) * i) / steps;
+                //console.log("IZ:"+interpZ+" lZ:"+lastZ+" z:"+z+" i:"+i+" s:"+steps);
+                if (isNaN(interpZ)) interpZ = lastZ;
 
-        	// Add interpolated point to the path
-		//console.log("INTER: X" + interpX + " Y" + interpY + " Z" + interpZ);
-        	path.push(interpX);
-        	path.push(interpY);
-        	path.push(interpZ);  //FIXME: Assuming Z remains constant for the arc
-        	path.push(lastF || 1000);
-    	}
+                // Add interpolated point to the path
+                //console.log("INTER: X" + interpX + " Y" + interpY + " Z" + interpZ);
+                path.push(interpX);
+                path.push(interpY);
+                path.push(interpZ);  //FIXME: Assuming Z remains constant for the arc
+                path.push(lastF || 1000);
+            }
 
-    	// Update last position to final arc endpoint
-    	lastX = x;
-    	lastY = y;
-    	lastZ = z;
-	}
+            // Update last position to final arc endpoint
+            lastX = x;
+            lastY = y;
+            lastZ = z;
+        }
 
 
         while (i < gcode.length && gcode[i] != '\r' && gcode[i] != '\n')
