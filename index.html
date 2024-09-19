@@ -86,6 +86,7 @@ function parse_url() {
 	if(hashParams.get('bh')) $('input#cutterHeight').val(hashParams.get('bh'));
 	if(hashParams.get('sz')) $('input#surfaceZ').val(hashParams.get('sz'));
 	if(hashParams.get('gcode')) $('textarea#gcodeText').val(hashParams.get('gcode'));
+	if(hashParams.get('gurl')) fetch(hashParams.get('gurl')).then((response) => response.text()).then((text) => {$('textarea#gcodeText').val(text); simulate();});
 	if(hashParams.get('an') && hashParams.get('an') == Number(!anim)) animatec();
 }
 
