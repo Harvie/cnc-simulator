@@ -65,18 +65,20 @@ function animatec() {
 
 const hashParams = new URLSearchParams(window.location.hash.substring(1));
 //alert(hashParams.get('gcode').length);
-function config_changed() {
+function config_changed(gcode=false) {
 	hashParams.set('bd', $('input#cutterDia').val());
 	hashParams.set('ba', $('input#cutterAngle').val());
 	hashParams.set('bh', $('input#cutterHeight').val());
 	hashParams.set('sz', $('input#surfaceZ').val());
 	hashParams.set('an', Number(!!anim));
-	hashParams.delete('gcode');
 	//hashParams.set('gcode', $('textarea#gcodeText').val());
-	try {
+	hashParams.delete('gcode');
+	window.location.hash=hashParams.toString();
+
+	if(gcode) try {
 		window.location.hash=hashParams.toString()+"&gcode="+encodeURIComponent($('textarea#gcodeText').val());
 	} catch {
-		window.location.hash=hashParams.toString();
+		alert($('textarea#gcodeText').val().length+" bytes of G-Code is too long for URL!");
 	}
 }
 
@@ -121,6 +123,7 @@ G0 Z3
 <input id="myFile" type="file" accept=".gcode,.nc,.ngc,.txt,.g-code,.cnc" onchange="loadfile();" style="float: left;" />
 <button onclick="simulate()" style="float:right;"><b>SIMULATE</b></button>
 <button onclick="animatec()" style="float:right;">ANIMATE</button>
+<button onclick="config_changed(true)" style="float:right;">TO URL</button>
 <br /><br />
 © Todd Fleming 2014, Tomas Mudrunka 2024
 </div>
