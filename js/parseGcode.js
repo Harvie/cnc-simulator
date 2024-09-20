@@ -1,6 +1,7 @@
 // Copyright 2014 Todd Fleming
+// Copyright 2024 Tomas Mudrunka
 //
-// This file is part of jscut.
+// This file was originaly part of jscut.
 //
 // jscut is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
