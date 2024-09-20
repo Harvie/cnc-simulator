@@ -14,7 +14,7 @@ Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/G
 ### Features
  * Load g-code from file
  * Pass settings and G-Code via URL
- * Support for arcs (G02, G03, IJ only)
+ * Support for arcs (G02, G03, IJ only, R experimental)
  * Animation
  * Works offline (no webserver needed)
  * V-Carving

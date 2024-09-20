@@ -16,6 +16,45 @@
 // You should have received a copy of the GNU General Public License
 // along with jscut.  If not, see <http://www.gnu.org/licenses/>.
 
+function convertRtoIJ(startX, startY, endX, endY, radius, isClockwise) {
+    // Calculate the midpoint between the start and end points
+    const midX = (startX + endX) / 2;
+    const midY = (startY + endY) / 2;
+
+    // Calculate the chord length (distance between start and end points)
+    const chordLength = Math.sqrt((endX - startX) ** 2 + (endY - startY) ** 2);
+
+    // Ensure the radius is sufficient to create an arc
+    if (2 * radius < chordLength) {
+        throw new Error("Radius "+radius+" is too small for the specified arc. Minimum: "+(chordLength/2));
+    }
+
+    // Calculate the height of the arc (distance from the midpoint to the center)
+    const height = Math.sqrt(radius ** 2 - (chordLength / 2) ** 2);
+
+    // Calculate the unit vector perpendicular to the chord (normal direction)
+    const unitX = (endY - startY) / chordLength;
+    const unitY = (startX - endX) / chordLength;
+
+    // Determine the center of the arc based on clockwise (G2) or counterclockwise (G3)
+    let centerX, centerY;
+    if (isClockwise) { // G2 (clockwise)
+        centerX = midX + height * unitX;
+        centerY = midY + height * unitY;
+    } else { // G3 (counterclockwise)
+        centerX = midX - height * unitX;
+        centerY = midY - height * unitY;
+    }
+
+    // Calculate I and J as the relative distances from the start point to the center
+    const I = centerX - startX;
+    const J = centerY - startY;
+
+    // Return the values
+    return [ I, J ];
+}
+
+
 var jscut = jscut || {};
 jscut.parseGcode = function (options, gcode, arcPrecision) {
     "use strict";
@@ -104,7 +143,8 @@ jscut.parseGcode = function (options, gcode, arcPrecision) {
             //console.log("LAST: X" + lastX + " Y" + lastY + " Z" + lastZ);
             //console.log("G" + g + " X" + x + " Y" + y + " Z" + z + " I" + I + " J" + J + " K" + K + " R" + R);
 
-            if (!isNaN(R) || !isNaN(K)) console.log("G02/G03 K and R are not supported. Only I and J can be used for now.")
+            if (!isNaN(R) || !isNaN(K)) console.log("G02/G03 K is not supported. R is experimental. Only I and J should be used for now.")
+            if (!isNaN(R) && isNaN(I) && isNaN(J)) [I, J] = convertRtoIJ(lastX, lastY, x, y, R, g==2);
             if (isNaN(I) && !isNaN(J)) I = 0;
             if (isNaN(J) && !isNaN(I)) J = 0;
             if (isNaN(z)) z = lastZ;
