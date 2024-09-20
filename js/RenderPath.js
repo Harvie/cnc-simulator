@@ -1,7 +1,7 @@
 // Copyright 2014 Todd Fleming
 // Copyright 2024 Tomas Mudrunka
 //
-// This file was part of jscut.
+// This file was originaly part of jscut.
 //
 // jscut is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -60,6 +60,7 @@ void main(void) {
 
     gl_Position = camera * (rotate * translateScale * vec4(vPos, 1.0) + vec4(0.0, 0.0, -3.5, 0.0));
     color = vec4(vColor, 1.0);
+    gl_PointSize = 5.0;
 }
 `;
 var rasterizePathFragmentShaderSrc = `
@@ -816,7 +817,7 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
         needToDrawHeightMap = false;
     }
 
-    var cylBuffer, vbitBuffer;
+    var cylBuffer, vbitBuffer, crossBuffer;
     var cylStride = 6;
     var cylNumVertexes = 0, vbitNumVertexes = 0;
 
@@ -886,6 +887,19 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
         vbitBuffer = self.gl.createBuffer();
         self.gl.bindBuffer(self.gl.ARRAY_BUFFER, vbitBuffer);
         self.gl.bufferData(self.gl.ARRAY_BUFFER, new Float32Array(vbitContent), self.gl.STATIC_DRAW);
+        self.gl.bindBuffer(self.gl.ARRAY_BUFFER, null);
+
+        var crossContent = []
+        //crossContent.push(0,0, 0,1,0,0);
+        crossContent.push(-0.1,0,0, 0,0,0);
+        crossContent.push(0.1,0,0,  1,0,0);
+        crossContent.push(0,-0.1,0, 0,0,0);
+        crossContent.push(0,0.1,0,  0,1,0);
+        crossContent.push(0,0,-0.1, 0,0,0);
+        crossContent.push(0,0, 0.1, 0,0,1);
+        crossBuffer = self.gl.createBuffer();
+        self.gl.bindBuffer(self.gl.ARRAY_BUFFER, crossBuffer);
+        self.gl.bufferData(self.gl.ARRAY_BUFFER, new Float32Array(crossContent), self.gl.STATIC_DRAW);
         self.gl.bindBuffer(self.gl.ARRAY_BUFFER, null);
     })();
 
@@ -960,6 +974,33 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
         self.gl.useProgram(null);
     }
 
+    self.drawOrigin = function () {
+        self.gl.useProgram(basicProgram);
+
+        self.gl.bindBuffer(self.gl.ARRAY_BUFFER, crossBuffer);
+        self.gl.vertexAttribPointer(basicProgram.vPos, 3, self.gl.FLOAT, false, cylStride * Float32Array.BYTES_PER_ELEMENT, 0);
+        self.gl.vertexAttribPointer(basicProgram.vColor, 3, self.gl.FLOAT, false, cylStride * Float32Array.BYTES_PER_ELEMENT, 3 * Float32Array.BYTES_PER_ELEMENT);
+
+        self.gl.enableVertexAttribArray(basicProgram.vPos);
+        self.gl.enableVertexAttribArray(basicProgram.vColor);
+
+        self.gl.uniform3f(basicProgram.translate, (0 + pathXOffset) * pathScale, (0 + pathYOffset) * pathScale, (0 - pathTopZ) * pathScale);
+        self.gl.uniform3f(basicProgram.scale, 1, 1, 1);
+        //self.gl.uniform3f(basicProgram.translate, 0, 0, 0);
+
+        //console.log(self.gl.getParameter(self.gl.ALIASED_LINE_WIDTH_RANGE));
+        //console.log(self.gl.getParameter(self.gl.ALIASED_POINT_SIZE_RANGE));
+        self.gl.lineWidth(2);
+        self.gl.drawArrays(self.gl.LINES, 0, 6);
+        //self.gl.drawArrays(self.gl.POINTS, 0, 1);
+
+        self.gl.disableVertexAttribArray(basicProgram.vPos);
+        self.gl.disableVertexAttribArray(basicProgram.vColor);
+
+        self.gl.bindBuffer(self.gl.ARRAY_BUFFER, null);
+        self.gl.useProgram(null);
+    }
+
     var pendingRequest = false;
     requestFrame = function () {
         if (!rasterizePathProgram || !renderHeightMapProgram || !basicProgram)
@@ -980,6 +1021,7 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
         if (needToDrawHeightMap) {
             self.drawHeightMap();
             self.drawCutter();
+            self.drawOrigin();
         }
         pendingRequest = false;
 
