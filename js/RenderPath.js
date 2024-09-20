@@ -815,25 +815,18 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
         needToDrawHeightMap = false;
     }
 
-    var cylBuffer;
+    var cylBuffer, vbitBuffer;
     var cylStride = 6;
-    var cylNumVertexes = 0;
+    var cylNumVertexes = 0, vbitNumVertexes = 0;
 
     if (self.gl) (function () {
         var numDivisions = 40;
-        var numTriangles = numDivisions * 4;
-        cylNumVertexes = numTriangles * 3;
-        var bufferContent = new Float32Array(cylNumVertexes * cylStride);
+        var cylContent = [];
+        var vbitContent = [];
         var r = 0.7, g = 0.7, b = 0.0; //COLOR OF CUTTER BIT
 
-        var pos = 0;
-        function addVertex(x, y, z) {
-            bufferContent[pos++] = x;
-            bufferContent[pos++] = y;
-            bufferContent[pos++] = z;
-            bufferContent[pos++] = r;
-            bufferContent[pos++] = g;
-            bufferContent[pos++] = b;
+        function addVertex(buf, x, y, z) {
+            buf.push(x,y,z,r,g,b);
         }
 
         var lastX = .5 * Math.cos(0);
@@ -845,45 +838,53 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
             var x = .5 * Math.cos(j * 2 * Math.PI / numDivisions);
             var y = .5 * Math.sin(j * 2 * Math.PI / numDivisions);
 
-            if(isVBit) {
+            //V-BIT
                 //Side
-                addVertex(0, 0, 0);
-                addVertex(x, y, 1);
-                addVertex(lastX, lastY, 1);
+                addVertex(vbitContent, 0, 0, 0);
+                addVertex(vbitContent, x, y, 1);
+                addVertex(vbitContent, lastX, lastY, 1);
 
                 //Top of the cutter shank
-                addVertex(0, 0, 1);
-                addVertex(lastX, lastY, 1);
-                addVertex(x, y, 1);
-            } else {
+                addVertex(vbitContent, 0, 0, 1);
+                addVertex(vbitContent, lastX, lastY, 1);
+                addVertex(vbitContent, x, y, 1);
+
+            //Cylinder
                 //Side (upper)
-                addVertex(lastX, lastY, 0);
-                addVertex(x, y, 0);
-                addVertex(lastX, lastY, 1);
+                addVertex(cylContent, lastX, lastY, 0);
+                addVertex(cylContent, x, y, 0);
+                addVertex(cylContent, lastX, lastY, 1);
 
                 //Side (lower)
-                addVertex(x, y, 0);
-                addVertex(x, y, 1);
-                addVertex(lastX, lastY, 1);
+                addVertex(cylContent, x, y, 0);
+                addVertex(cylContent, x, y, 1);
+                addVertex(cylContent, lastX, lastY, 1);
 
                 //Tip of the cutter
-                addVertex(0, 0, 0);
-                addVertex(x, y, 0);
-                addVertex(lastX, lastY, 0);
+                addVertex(cylContent, 0, 0, 0);
+                addVertex(cylContent, x, y, 0);
+                addVertex(cylContent, lastX, lastY, 0);
 
                 //Top of the cutter shank
-                addVertex(0, 0, 1);
-                addVertex(lastX, lastY, 1);
-                addVertex(x, y, 1);
-            }
+                addVertex(cylContent, 0, 0, 1);
+                addVertex(cylContent, lastX, lastY, 1);
+                addVertex(cylContent, x, y, 1);
 
             lastX = x;
             lastY = y;
         }
 
+        cylNumVertexes = cylContent.length / cylStride;
+        vbitNumVertexes = vbitContent.length / cylStride;
+
         cylBuffer = self.gl.createBuffer();
         self.gl.bindBuffer(self.gl.ARRAY_BUFFER, cylBuffer);
-        self.gl.bufferData(self.gl.ARRAY_BUFFER, bufferContent, self.gl.STATIC_DRAW);
+        self.gl.bufferData(self.gl.ARRAY_BUFFER, new Float32Array(cylContent), self.gl.STATIC_DRAW);
+        self.gl.bindBuffer(self.gl.ARRAY_BUFFER, null);
+
+        vbitBuffer = self.gl.createBuffer();
+        self.gl.bindBuffer(self.gl.ARRAY_BUFFER, vbitBuffer);
+        self.gl.bufferData(self.gl.ARRAY_BUFFER, new Float32Array(vbitContent), self.gl.STATIC_DRAW);
         self.gl.bindBuffer(self.gl.ARRAY_BUFFER, null);
     })();
 
@@ -934,14 +935,22 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
         self.gl.uniform3f(basicProgram.translate, (x + pathXOffset) * pathScale, (y + pathYOffset) * pathScale, (z - pathTopZ) * pathScale);
         self.gl.uniformMatrix4fv(basicProgram.rotate, false, rotate);
 
-        self.gl.bindBuffer(self.gl.ARRAY_BUFFER, cylBuffer);
+        if(isVBit) {
+            self.gl.bindBuffer(self.gl.ARRAY_BUFFER, vbitBuffer);
+        } else {
+            self.gl.bindBuffer(self.gl.ARRAY_BUFFER, cylBuffer);
+        }
         self.gl.vertexAttribPointer(basicProgram.vPos, 3, self.gl.FLOAT, false, cylStride * Float32Array.BYTES_PER_ELEMENT, 0);
         self.gl.vertexAttribPointer(basicProgram.vColor, 3, self.gl.FLOAT, false, cylStride * Float32Array.BYTES_PER_ELEMENT, 3 * Float32Array.BYTES_PER_ELEMENT);
 
         self.gl.enableVertexAttribArray(basicProgram.vPos);
         self.gl.enableVertexAttribArray(basicProgram.vColor);
 
-        self.gl.drawArrays(self.gl.TRIANGLES, 0, cylNumVertexes);
+        if(isVBit) {
+            self.gl.drawArrays(self.gl.TRIANGLES, 0, vbitNumVertexes);
+        } else {
+            self.gl.drawArrays(self.gl.TRIANGLES, 0, cylNumVertexes);
+        }
 
         self.gl.disableVertexAttribArray(basicProgram.vPos);
         self.gl.disableVertexAttribArray(basicProgram.vColor);
