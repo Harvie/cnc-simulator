@@ -1117,6 +1117,17 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, parsed_g
             mat4.copy(origRotate, renderPath.getRotate());
         });
 
+        // TODO: actualy zoom
+        $(canvas).on('wheel', function(event) {
+          if (event.originalEvent.deltaY !== 0) {
+            if (event.originalEvent.deltaY < 0) {
+              console.log('zoom up');
+            } else {
+              console.log('zoom down');
+            }
+          }
+        });
+
         $(document).mousemove(function (e) {
             if (!mouseDown)
                 return;
