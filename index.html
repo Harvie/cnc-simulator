@@ -19,15 +19,17 @@
     <script src="js/RenderPath.js"></script>
     <script>
 
-    var renderPath;
-function simulate() {
+let renderPath;
+function simulator_init() {
+	renderPath = startRenderPath({}, $("#renderPathCanvas")[0], null, 'js', simulate);
+}
+
+function simulate(rp) {
+	if(!renderPath) renderPath = rp;
 	var canvas = document.getElementById('renderPathCanvas');
 	canvas.width = canvas.offsetWidth;
 	canvas.height = canvas.offsetHeight;
-
-    renderPath = startRenderPath({}, $("#renderPathCanvas")[0], null, 'js', 
-            jscut.parseGcode({}, $('textarea#gcodeText').val()), $('input#surfaceZ').val(), $('input#cutterDia').val(), $('input#cutterAngle').val(), $('input#cutterHeight').val(), null
-    );
+	renderPath.fillPathBuffer(jscut.parseGcode({}, $('textarea#gcodeText').val()), $('input#surfaceZ').val(), $('input#cutterDia').val(), $('input#cutterAngle').val(), $('input#cutterHeight').val());
 	set_time();
 }
 window.addEventListener("resize", simulate);
@@ -100,7 +102,7 @@ function parse_url() {
 		// div { border: 3px solid blue; }
 	</style>
 </head>
-<body onload="parse_url(); simulate();">
+<body onload="simulator_init(); parse_url(); simulate();">
 
 		<div style="float: left; width: 70%; height: 97vh; text-align: left;">
                     <canvas id="renderPathCanvas" style="border: none; display: block; width: 100%; height: 92%;"></canvas><br /><br />

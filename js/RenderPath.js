@@ -268,7 +268,7 @@ void main(void) {
 `;
 
 
-function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle, cutterH, shadersReady) {
+function RenderPath(options, canvas, shaderDir, shadersReady) {
     "use strict";
     var self = this;
 
@@ -278,19 +278,15 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
 
     var gpuMem = 2 * 1024 * 1024;
     var resolution = 1024;
-
-    pathTopZ = pathTopZ || 0;
-    cutterDia = cutterDia || .125;
-    if(!cutterAngle || cutterAngle <= 0 || cutterAngle > 180) cutterAngle = 180;
-    var cutterAngleRad = (cutterAngle * Math.PI / 180) || Math.PI;
-    var isVBit = cutterAngle < 180;
-    cutterH = cutterH || 10;
-    if(isVBit) cutterH = (cutterDia/2)/Math.tan(cutterAngleRad/2); //Calculate corect cone height given radius and angle
-
+    var cutterDia = .125;
+    var cutterAngleRad = Math.PI;
+    var isVBit = false;
+    var cutterH = 0;
     var pathXOffset = 0;
     var pathYOffset = 0;
     var pathScale = 1;
     var pathMinZ = -1;
+    var pathTopZ = 0;
     var stopAtTime = 9999999;
     var rotate = mat4.create();
 
@@ -420,13 +416,22 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
     var pathNumVertexes = 0;
     self.totalTime = 0;
 
-    self.fillPathBuffer = function (path) {
+    self.fillPathBuffer = function (path, topZ, cutterDiameter, cutterAngle, cutterHeight) {
         if (!rasterizePathProgram || !renderHeightMapProgram || !basicProgram)
             return;
 
         var startTime = Date.now();
         if (options.profile)
             console.log("fillPathBuffer...");
+
+        pathTopZ = topZ;
+        cutterDia = cutterDiameter;
+        if (cutterAngle <= 0 || cutterAngle > 180)
+            cutterAngle = 180;
+        cutterAngleRad = cutterAngle * Math.PI / 180;
+        isVBit = cutterAngle < 180;
+        cutterH = cutterHeight;
+        if(isVBit) cutterH = (cutterDia/2)/Math.tan(cutterAngleRad/2); //Calculate corect cone height given radius and angle
 
         needToCreatePathTexture = true;
         requestFrame();
@@ -1084,8 +1089,7 @@ function RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle
     }
 }
 
-function startRenderPath(options, canvas, timeSliderElement, shaderDir, parsed_gcode, pathTopZ, cutterDia, cutterAngle, cutterH, ready) {
-
+function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
     var renderPath;
 
     /* Show selected time
@@ -1101,7 +1105,7 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, parsed_g
         });
     */
 
-    renderPath = new RenderPath(options, canvas, shaderDir, pathTopZ, cutterDia, cutterAngle, cutterH, function (renderPath) {
+    renderPath = new RenderPath(options, canvas, shaderDir, function (renderPath) {
         renderPath.fillPathBuffer([], 0, 0, 180, 0);
 
         var mouseDown = false;
@@ -1149,9 +1153,17 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, parsed_g
             });
 	*/
 
-        renderPath.fillPathBuffer(parsed_gcode);
         if(ready) ready(renderPath);
     });
 
     return renderPath;
+}
+
+function startRenderPathDemo() {
+    var renderPath;
+    renderPath = startRenderPath({}, $("#renderPathCanvas")[0], $('#timeSlider'), 'js', function (renderPath) {
+        $.get("logo-gcode.txt", function (gcode) {
+            renderPath.fillPathBuffer(jscut.parseGcode({}, gcode), 0, .125, 180, 1);
+        });
+    });
 }

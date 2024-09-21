@@ -22,7 +22,6 @@ Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/G
 
 ### TODO
  * weird V-Bit behaviour when Surface Z != 0 (perhaps we should just transpose Z when parsing g-code...)
- * After calling simulate() the old instance is stuck somewhere while the new one is created. Probably GL context not cleaned up properly...
  * Figure out why viewport is always square (cannot properly fill non-square rectangles)
  * 3D view zooming and translating
  * Support for mm/inch (bit settings and G21, G20)
