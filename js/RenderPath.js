@@ -1113,7 +1113,7 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
         var lastY = 0;
 
         var origRotate = mat4.create();
-        $(canvas).mousedown(function (e) {
+        $(canvas).on('mousedown touchdown', function (e) {
             e.preventDefault();
             mouseDown = true;
             lastX = e.pageX;
@@ -1132,7 +1132,7 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
           }
         });
 
-        $(document).mousemove(function (e) {
+        $(document).on('mousemove touchmove', function (e) {
             if (!mouseDown)
                 return;
             var m = mat4.create();
@@ -1141,7 +1141,7 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
             renderPath.setRotate(m);
         });
 
-        $(document).mouseup(function (e) {
+        $(document).on('mouseup touchup', function (e) {
             mouseDown = false;
         });
 
