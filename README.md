@@ -16,7 +16,7 @@ Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/G
  * Pass settings and G-Code via URL
  * Support for arcs (G02, G03, XY plane only, IJ reccomended, R experimental)
  * Animation
- * Works offline (no webserver needed)
+ * Works offline (no webserver needed, copy at archive.org wayback machine also works)
  * V-Carving
  * Visualize origin point
 
