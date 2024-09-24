@@ -414,6 +414,8 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
     var pathStride = 9;
     var pathVertexesPerLine = 18;
     var pathNumVertexes = 0;
+
+    //These variables are meant to be read by outside world:
     self.totalTime = 0;
     self.X = 0;
     self.Y = 0;
