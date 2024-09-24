@@ -39,6 +39,7 @@ function set_time() {
 	timeSliderElement = $('#timeSlider');
 	renderPath.setStopAtTime(timeSliderElement.val() / timeSliderElement.attr("max") * renderPath.totalTime);
 	document.getElementById('timeDisplay').innerHTML = (Math.round(timeSliderElement.val() / timeSliderElement.attr("max") * renderPath.totalTime) + 's');
+	document.getElementById('coordsDisplay').innerHTML = ("X:" + renderPath.X.toFixed(2) + " Y:" + renderPath.Y.toFixed(2) + " Z:" + renderPath.Z.toFixed(2));
 	//document.getElementById('timeTotDisplay').innerHTML = renderPath.totalTime + 's';
 }
 
@@ -106,7 +107,7 @@ function parse_url() {
 
 		<div style="float: left; width: 70%; height: 97vh; text-align: left;">
                     <canvas id="renderPathCanvas" style="border: none; display: block; width: 100%; height: 92%;"></canvas><br /><br />
-                    TIME: <span id="timeDisplay"></span> <input type="range" min="0" max="10000" value="10000" class="slider" id="timeSlider" style="width: 90%; float:right;" onchange="set_time()" oninput="set_time()" />
+                    TIME: <span id="timeDisplay"></span> <span id="coordsDisplay"></span> <input type="range" min="0" max="10000" value="10000" class="slider" id="timeSlider" style="width: 90%; float:right;" onchange="set_time()" oninput="set_time()" />
 			<!-- input id="timeSlider" type="text" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="1000" style="width: 90%;" / -->
 		</div>
 <div style="float: right; width: 28%; height: 97vh;">

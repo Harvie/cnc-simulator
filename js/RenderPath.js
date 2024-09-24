@@ -415,6 +415,9 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
     var pathVertexesPerLine = 18;
     var pathNumVertexes = 0;
     self.totalTime = 0;
+    self.X = 0;
+    self.Y = 0;
+    self.Z = 0;
 
     self.fillPathBuffer = function (path, topZ, cutterDiameter, cutterAngle, cutterHeight) {
         if (!rasterizePathProgram || !renderHeightMapProgram || !basicProgram)
@@ -948,6 +951,10 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
             y = pathBufferContent[offset + 4];
             z = pathBufferContent[offset + 5];
         }
+
+	self.X = x
+	self.Y = y
+	self.Z = z
 
         self.gl.useProgram(basicProgram);
 

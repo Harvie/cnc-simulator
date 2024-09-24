@@ -19,6 +19,7 @@ Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/G
  * Works offline (no webserver needed, copy at archive.org wayback machine also works)
  * V-Carving
  * Visualize origin point
+ * Show current coordinates
 
 ### TODO
  * weird V-Bit behaviour when Surface Z > 0 (perhaps we should just transpose Z when parsing g-code, and fix origin crosshair...)
