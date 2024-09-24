@@ -101,13 +101,16 @@ function parse_url() {
 		* { font-family: Helvetica, sans-serif; }
 		// html, body: { padding: 0 0 0 0; margin: 0 0 0 0; }
 		// div { border: 3px solid blue; }
+		td * { width: 98%; }
+		a { text-decoration: none; color: royalblue; }
 	</style>
 </head>
 <body onload="simulator_init(); parse_url(); simulate();">
 
 		<div style="float: left; width: 70%; height: 97vh; text-align: left;">
-                    <canvas id="renderPathCanvas" style="border: none; display: block; width: 100%; height: 92%;"></canvas><br /><br />
-                    TIME: <span id="timeDisplay"></span> <span id="coordsDisplay"></span> <input type="range" min="0" max="10000" value="10000" class="slider" id="timeSlider" style="width: 90%; float:right;" onchange="set_time()" oninput="set_time()" />
+                    <canvas id="renderPathCanvas" style="border: none; display: block; width: 100%; height: 92%;"></canvas><br />
+                    T:<span id="timeDisplay"></span> <span id="coordsDisplay" style="float:right;"></span><br />
+			<input type="range" min="0" max="10000" value="10000" class="slider" id="timeSlider" style="width: 100%; float:right;" onchange="set_time()" oninput="set_time()" />
 			<!-- input id="timeSlider" type="text" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="1000" style="width: 90%;" / -->
 		</div>
 <div style="float: right; width: 28%; height: 97vh;">
@@ -118,7 +121,7 @@ function parse_url() {
 <tr><td>Bit Height:</td><td><input id="cutterHeight" type="number" onchange="config_changed()" value="50"></td></tr>
 <tr><td>Surface Z:</td><td><input id="surfaceZ" type="number" onchange="config_changed()" value="0"></td></tr>
 </table>
-<br><textarea id="gcodeText" style="width: 100%; height: 66vh;">
+<textarea id="gcodeText" style="width: 98%; height: 66vh;">
 G0 X0 Y0 Z3
 G1 Z0 F40
 G2 X10 Y10 I5 J5 Z-3
