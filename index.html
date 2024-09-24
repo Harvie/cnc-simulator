@@ -39,7 +39,7 @@ function set_time() {
 	timeSliderElement = $('#timeSlider');
 	renderPath.setStopAtTime(timeSliderElement.val() / timeSliderElement.attr("max") * renderPath.totalTime);
 	document.getElementById('timeDisplay').innerHTML = (Math.round(timeSliderElement.val() / timeSliderElement.attr("max") * renderPath.totalTime) + 's');
-	document.getElementById('coordsDisplay').innerHTML = ("X:" + renderPath.X.toFixed(2) + " Y:" + renderPath.Y.toFixed(2) + " Z:" + renderPath.Z.toFixed(2));
+	document.getElementById('coordsDisplay').innerHTML = ("<span id='cox'>X:" + renderPath.X.toFixed(2) + "</span> <span id='coy'>Y:" + renderPath.Y.toFixed(2) + "</span> <span id='coz'>Z:" + renderPath.Z.toFixed(2)+"</span>");
 	//document.getElementById('timeTotDisplay').innerHTML = renderPath.totalTime + 's';
 }
 
@@ -103,6 +103,9 @@ function parse_url() {
 		// div { border: 3px solid blue; }
 		td * { width: 98%; }
 		a { text-decoration: none; color: royalblue; }
+		#cox { color: darkred; display: inline-block; width: 9ch; }
+		#coy { color: darkgreen; display: inline-block; width: 9ch; }
+		#coz { color: darkblue; display: inline-block; width: 9ch; }
 	</style>
 </head>
 <body onload="simulator_init(); parse_url(); simulate();">
