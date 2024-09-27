@@ -20,11 +20,12 @@ Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/G
  * V-Carving
  * Visualize origin point
  * Show current coordinates
+ * Mouse wheel zooming
+ * Non-square viewport supported
 
 ### TODO
  * weird V-Bit behaviour when Surface Z > 0 (perhaps we should just transpose Z when parsing g-code, and fix origin crosshair...)
- * Figure out why viewport is always square (cannot properly fill non-square rectangles)
- * 3D view zooming and translating
+ * 3D view translating?
  * Support for mm/inch (bit settings and G21, G20)
  * Support for ball nose and radiused milling bits
  * Tool library and toolchanges (eg. T1 M6)

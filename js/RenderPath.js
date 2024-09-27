@@ -28,6 +28,7 @@ void main(void) {
 }
 `;
 var basicVertexShaderSrc = `
+uniform vec2 aspect;
 uniform vec3 scale;
 uniform vec3 translate;
 uniform mat4 rotate;
@@ -58,7 +59,7 @@ void main(void) {
         0.0,                        0.0,                    2.0*far*near/(near-far),    0.0
     );
 
-    gl_Position = camera * (rotate * translateScale * vec4(vPos, 1.0) + vec4(0.0, 0.0, -3.5, 0.0));
+    gl_Position = camera * (rotate * translateScale * vec4(vPos, 1.0) + vec4(0.0, 0.0, -3.5, 0.0)) * vec4(aspect.x, aspect.y, 1.0, 1.0);
     color = vec4(vColor, 1.0);
     gl_PointSize = 5.0;
 }
@@ -201,6 +202,7 @@ void main(void) {
 }
 `;
 var renderHeightMapVertexShaderSrc = `
+uniform vec2 aspect;
 uniform float resolution;
 uniform float pathScale;
 uniform float pathMinZ;
@@ -263,7 +265,7 @@ void main(void) {
         0.0,                        0.0,                    2.0*far*near/(near-far),    0.0
     );
 
-    gl_Position = camera * offset * rotate * p;
+    gl_Position = camera * offset * rotate * p * vec4(aspect.x, aspect.y, 1.0, 1.0);
 }
 `;
 
@@ -289,6 +291,9 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
     var pathTopZ = 0;
     var stopAtTime = 9999999;
     var rotate = mat4.create();
+    var canvasAspectX = 1;
+    var canvasAspectY = 1;
+    self.zoom = 1;
 
     $(canvas).resize(function () {
         needToDrawHeightMap = true;
@@ -359,6 +364,7 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
 
         self.gl.useProgram(renderHeightMapProgram);
 
+        renderHeightMapProgram.aspect = self.gl.getUniformLocation(renderHeightMapProgram, "aspect");
         renderHeightMapProgram.resolution = self.gl.getUniformLocation(renderHeightMapProgram, "resolution");
         renderHeightMapProgram.pathScale = self.gl.getUniformLocation(renderHeightMapProgram, "pathScale");
         renderHeightMapProgram.pathMinZ = self.gl.getUniformLocation(renderHeightMapProgram, "pathMinZ");
@@ -390,6 +396,7 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
 
         self.gl.useProgram(basicProgram);
 
+        basicProgram.aspect = self.gl.getUniformLocation(basicProgram, "aspect");
         basicProgram.scale = self.gl.getUniformLocation(basicProgram, "scale");
         basicProgram.translate = self.gl.getUniformLocation(basicProgram, "translate");
         basicProgram.rotate = self.gl.getUniformLocation(basicProgram, "rotate");
@@ -785,13 +792,22 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
         self.gl.useProgram(renderHeightMapProgram);
         self.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         self.gl.enable(self.gl.DEPTH_TEST);
-        var canvasSize = Math.min(canvas.width, canvas.height);
-        self.gl.viewport((canvas.width - canvasSize) / 2, (canvas.height - canvasSize) / 2, canvasSize, canvasSize);
+        //var canvasSize = Math.min(canvas.width, canvas.height);
+        //self.gl.viewport((canvas.width - canvasSize) / 2, (canvas.height - canvasSize) / 2, canvasSize, canvasSize);
+        self.gl.viewport(0, 0, canvas.width, canvas.height);
+        if(canvas.width > canvas.height) {
+            canvasAspectX=canvas.height/canvas.width;
+            canvasAspectY=1;
+        } else {
+            canvasAspectX=1;
+            canvasAspectY=canvas.width/canvas.height;
+        }
         self.gl.clear(self.gl.COLOR_BUFFER_BIT | self.gl.DEPTH_BUFFER_BIT);
 
         self.gl.activeTexture(self.gl.TEXTURE0);
         self.gl.bindTexture(self.gl.TEXTURE_2D, pathRgbaTexture);
 
+        self.gl.uniform2f(renderHeightMapProgram.aspect, canvasAspectX*self.zoom, canvasAspectY*self.zoom);
         self.gl.uniform1f(renderHeightMapProgram.resolution, resolution);
         self.gl.uniform1f(renderHeightMapProgram.pathScale, pathScale);
         self.gl.uniform1f(renderHeightMapProgram.pathMinZ, pathMinZ);
@@ -960,6 +976,7 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
 
         self.gl.useProgram(basicProgram);
 
+        self.gl.uniform2f(basicProgram.aspect, canvasAspectX*self.zoom, canvasAspectY*self.zoom);
         self.gl.uniform3f(basicProgram.scale, cutterDia * pathScale, cutterDia * pathScale, cutterH * pathScale);
         self.gl.uniform3f(basicProgram.translate, (x + pathXOffset) * pathScale, (y + pathYOffset) * pathScale, (z - pathTopZ) * pathScale);
         self.gl.uniformMatrix4fv(basicProgram.rotate, false, rotate);
@@ -998,6 +1015,7 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
         self.gl.enableVertexAttribArray(basicProgram.vPos);
         self.gl.enableVertexAttribArray(basicProgram.vColor);
 
+        self.gl.uniform2f(basicProgram.aspect, canvasAspectX*self.zoom, canvasAspectY*self.zoom);
         self.gl.uniform3f(basicProgram.translate, (0 + pathXOffset) * pathScale, (0 + pathYOffset) * pathScale, (0 - pathTopZ) * pathScale);
         self.gl.uniform3f(basicProgram.scale, 1, 1, 1);
         //self.gl.uniform3f(basicProgram.translate, 0, 0, 0);
@@ -1065,6 +1083,18 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
         requestFrame();
     }
 
+    self.getZoom = function () {
+        return self.zoom;
+    }
+
+    self.setZoom = function (z) {
+	if(z > 0.000000001) {
+            self.zoom = z;
+            needToDrawHeightMap = true;
+            requestFrame();
+	}
+    }
+
     if (self.gl) {
         loadShader(rasterizePathVertexShaderSrc, self.gl.VERTEX_SHADER, function (shader) {
             rasterizePathVertexShader = shader;
@@ -1130,13 +1160,14 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
             mat4.copy(origRotate, renderPath.getRotate());
         });
 
-        // TODO: actualy zoom
         $(canvas).on('wheel', function(event) {
           if (event.originalEvent.deltaY !== 0) {
             if (event.originalEvent.deltaY < 0) {
-              console.log('zoom up');
+              renderPath.setZoom(renderPath.getZoom() - 0.1);
+              //console.log('zoom up '+renderPath.zoom);
             } else {
-              console.log('zoom down');
+              renderPath.setZoom(renderPath.getZoom() + 0.1);
+              //console.log('zoom down '+renderPath.zoom);
             }
           }
         });
