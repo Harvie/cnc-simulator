@@ -24,6 +24,7 @@ Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/G
  * Non-square viewport supported
 
 ### TODO
+ * Shaded milling bit
  * weird V-Bit behaviour when Surface Z > 0 (perhaps we should just transpose Z when parsing g-code, and fix origin crosshair...)
  * 3D view translating?
  * Support for mm/inch (bit settings and G21, G20)
