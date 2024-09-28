@@ -1152,7 +1152,7 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
         var lastY = 0;
 
         var origRotate = mat4.create();
-        $(canvas).on('mousedown touchdown', function (e) {
+        $(canvas).on('mousedown touchstart', function (e) {
             e.preventDefault();
             mouseDown = true;
             lastX = e.pageX;
@@ -1181,7 +1181,7 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
             renderPath.setRotate(m);
         });
 
-        $(document).on('mouseup touchup', function (e) {
+        $(document).on('mouseup touchend', function (e) {
             mouseDown = false;
         });
 
