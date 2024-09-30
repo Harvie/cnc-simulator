@@ -18,6 +18,8 @@
 
 //for i in *.txt; do echo "var ${i%%.txt}Src = \`"; cat "$i"; echo '`;'; done > shaders.js
 
+
+/// BASIC SHADER PROGRAM - Renders arbitrary shapes as cutter and origin cross
 var basicFragmentShaderSrc = `
 precision mediump float;
 
@@ -64,6 +66,8 @@ void main(void) {
     gl_PointSize = 5.0;
 }
 `;
+
+// RASTERIZE PATH SHADER PROGRAM - creates 2D heightmap from path and cutter shape
 var rasterizePathFragmentShaderSrc = `
 precision mediump float;
 
@@ -192,6 +196,8 @@ void main(void) {
     gl_Position.z = 1.9999 * (gl_Position.z - bottom) / (pathTopZ - bottom) - 1.0;
 }
 `;
+
+// RENDER HEIGHT MAP SHADER PROGRAM - renders 2D heightmap in 3D (visualy represents material after milling operation)
 var renderHeightMapFragmentShaderSrc = `
 precision mediump float;
 
