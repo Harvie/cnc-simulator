@@ -1161,15 +1161,16 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
             mat4.copy(origRotate, renderPath.getRotate());
         });
 
-        canvas.addEventListener('wheel', function(event) {
-          if (event.originalEvent.deltaY !== 0) {
-            if (event.originalEvent.deltaY < 0) {
+        canvas.addEventListener('wheel', function(e) {
+          if (e.deltaY !== 0) {
+            if (e.deltaY < 0) {
               renderPath.setZoom(renderPath.getZoom() - 0.1);
               //console.log('zoom up '+renderPath.zoom);
             } else {
               renderPath.setZoom(renderPath.getZoom() + 0.1);
               //console.log('zoom down '+renderPath.zoom);
             }
+            e.preventDefault();
           }
         });
 
