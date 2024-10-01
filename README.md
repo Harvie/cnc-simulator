@@ -22,8 +22,10 @@ Similar project used to be available since 2016-05 at www.cncwebtools.com/Apps/G
  * Show current coordinates
  * Mouse wheel zooming
  * Non-square viewport supported
+ * Limited number of dependencies (jQuery and Bootstrap are no longer needed)
 
 ### TODO
+ * Make everything work at mobile devices (responsive and touch)
  * Shaded milling bit
  * weird V-Bit behaviour when Surface Z > 0 (perhaps we should just transpose Z when parsing g-code, and fix origin crosshair...)
  * 3D view translating?
