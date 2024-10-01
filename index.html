@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <script src="lib/jquery-3.7.1.min.js"></script>
 <!--
+    <script src="lib/jquery-3.7.1.min.js"></script>
     <link href="lib/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="lib/bootstrap-slider.min.css" rel="stylesheet">
     <script src="lib/bootstrap-3.1.1/js/bootstrap.min.js"></script>
@@ -21,7 +21,7 @@
 
 let renderPath;
 function simulator_init() {
-	renderPath = startRenderPath({}, $("#renderPathCanvas")[0], null, 'js', simulate);
+	renderPath = startRenderPath({}, document.querySelector("#renderPathCanvas"), null, 'js', simulate);
 }
 
 function simulate(rp) {
@@ -29,16 +29,16 @@ function simulate(rp) {
 	var canvas = document.getElementById('renderPathCanvas');
 	canvas.width = canvas.offsetWidth;
 	canvas.height = canvas.offsetHeight;
-	renderPath.fillPathBuffer(jscut.parseGcode({}, $('textarea#gcodeText').val()), $('input#surfaceZ').val(), $('input#cutterDia').val(), $('input#cutterAngle').val(), $('input#cutterHeight').val());
+	renderPath.fillPathBuffer(jscut.parseGcode({}, document.querySelector('textarea#gcodeText').value), document.querySelector('input#surfaceZ').value, document.querySelector('input#cutterDia').value, document.querySelector('input#cutterAngle').value, document.querySelector('input#cutterHeight').value);
 	set_time();
 }
 window.addEventListener("resize", simulate);
 
 
 function set_time() {
-	timeSliderElement = $('#timeSlider');
-	renderPath.setStopAtTime(timeSliderElement.val() / timeSliderElement.attr("max") * renderPath.totalTime);
-	document.getElementById('timeDisplay').innerHTML = (Math.round(timeSliderElement.val() / timeSliderElement.attr("max") * renderPath.totalTime) + 's');
+	timeSliderElement = document.querySelector('#timeSlider');
+	renderPath.setStopAtTime(timeSliderElement.value / timeSliderElement.getAttribute("max") * renderPath.totalTime);
+	document.getElementById('timeDisplay').innerHTML = (Math.round(timeSliderElement.value / timeSliderElement.getAttribute("max") * renderPath.totalTime) + 's');
 	document.getElementById('coordsDisplay').innerHTML = ("<span id='cox'>X:" + renderPath.X.toFixed(2) + "</span> <span id='coy'>Y:" + renderPath.Y.toFixed(2) + "</span> <span id='coz'>Z:" + renderPath.Z.toFixed(2)+"</span>");
 	//document.getElementById('timeTotDisplay').innerHTML = renderPath.totalTime + 's';
 }
@@ -69,30 +69,30 @@ function animatec() {
 const hashParams = new URLSearchParams(window.location.hash.substring(1));
 //alert(hashParams.get('gcode').length);
 function config_changed(gcode=false) {
-	hashParams.set('bd', $('input#cutterDia').val());
-	hashParams.set('ba', $('input#cutterAngle').val());
-	hashParams.set('bh', $('input#cutterHeight').val());
-	hashParams.set('sz', $('input#surfaceZ').val());
+	hashParams.set('bd', document.querySelector('input#cutterDia').value);
+	hashParams.set('ba', document.querySelector('input#cutterAngle').value);
+	hashParams.set('bh', document.querySelector('input#cutterHeight').value);
+	hashParams.set('sz', document.querySelector('input#surfaceZ').value);
 	hashParams.set('an', Number(!!anim));
-	//hashParams.set('gcode', $('textarea#gcodeText').val());
+	//hashParams.set('gcode', document.querySelector('textarea#gcodeText').value);
 	hashParams.delete('gcode');
 	window.location.hash=hashParams.toString();
 
 	if(gcode) try {
 		hashParams.delete('gurl');
-		window.location.hash=hashParams.toString()+"&gcode="+encodeURIComponent($('textarea#gcodeText').val());
+		window.location.hash=hashParams.toString()+"&gcode="+encodeURIComponent(document.querySelector('textarea#gcodeText').value);
 	} catch {
-		alert($('textarea#gcodeText').val().length+" bytes of G-Code is too long for URL!");
+		alert(document.querySelector('textarea#gcodeText').value.length+" bytes of G-Code is too long for URL!");
 	}
 }
 
 function parse_url() {
-	if(hashParams.get('bd')) $('input#cutterDia').val(hashParams.get('bd'));
-	if(hashParams.get('ba')) $('input#cutterAngle').val(hashParams.get('ba'));
-	if(hashParams.get('bh')) $('input#cutterHeight').val(hashParams.get('bh'));
-	if(hashParams.get('sz')) $('input#surfaceZ').val(hashParams.get('sz'));
-	if(hashParams.get('gcode')) $('textarea#gcodeText').val(hashParams.get('gcode'));
-	if(hashParams.get('gurl')) fetch(hashParams.get('gurl')).then((response) => response.text()).then((text) => {$('textarea#gcodeText').val(";DOWNLOADED FROM: "+hashParams.get('gurl')+"\n"+text); simulate();});
+	if(hashParams.get('bd')) document.querySelector('input#cutterDia').value=hashParams.get('bd');
+	if(hashParams.get('ba')) document.querySelector('input#cutterAngle').value=hashParams.get('ba');
+	if(hashParams.get('bh')) document.querySelector('input#cutterHeight').value=hashParams.get('bh');
+	if(hashParams.get('sz')) document.querySelector('input#surfaceZ').value=hashParams.get('sz');
+	if(hashParams.get('gcode')) document.querySelector('textarea#gcodeText').value=hashParams.get('gcode');
+	if(hashParams.get('gurl')) fetch(hashParams.get('gurl')).then((response) => response.text()).then((text) => {document.querySelector('textarea#gcodeText').value=(";DOWNLOADED FROM: "+hashParams.get('gurl')+"\n"+text); simulate();});
 	if(hashParams.get('an') && hashParams.get('an') == Number(!anim)) animatec();
 }
 

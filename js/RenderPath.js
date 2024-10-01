@@ -301,11 +301,6 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
     var canvasAspectY = 1;
     self.zoom = 1;
 
-    $(canvas).resize(function () {
-        needToDrawHeightMap = true;
-        requestFrame();
-    });
-
     self.gl = WebGLUtils.setupWebGL(canvas);
 
     function loadShader(source, type, callback) {
@@ -1158,7 +1153,7 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
         var lastY = 0;
 
         var origRotate = mat4.create();
-        $(canvas).on('mousedown touchstart', function (e) {
+        canvas.addEventListener('mousedown', function (e) {
             e.preventDefault();
             mouseDown = true;
             lastX = e.pageX;
@@ -1166,7 +1161,7 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
             mat4.copy(origRotate, renderPath.getRotate());
         });
 
-        $(canvas).on('wheel', function(event) {
+        canvas.addEventListener('wheel', function(event) {
           if (event.originalEvent.deltaY !== 0) {
             if (event.originalEvent.deltaY < 0) {
               renderPath.setZoom(renderPath.getZoom() - 0.1);
@@ -1178,7 +1173,7 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
           }
         });
 
-        $(document).on('mousemove touchmove', function (e) {
+        document.addEventListener('mousemove', function (e) {
             if (!mouseDown)
                 return;
             var m = mat4.create();
@@ -1187,8 +1182,13 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
             renderPath.setRotate(m);
         });
 
-        $(document).on('mouseup touchend', function (e) {
+        document.addEventListener('mouseup', function (e) {
             mouseDown = false;
+        });
+
+        canvas.addEventListener('resize', function () {
+            needToDrawHeightMap = true;
+            requestFrame();
         });
 
 	/*
@@ -1207,9 +1207,9 @@ function startRenderPath(options, canvas, timeSliderElement, shaderDir, ready) {
 
 function startRenderPathDemo() {
     var renderPath;
-    renderPath = startRenderPath({}, $("#renderPathCanvas")[0], $('#timeSlider'), 'js', function (renderPath) {
-        $.get("logo-gcode.txt", function (gcode) {
-            renderPath.fillPathBuffer(jscut.parseGcode({}, gcode), 0, .125, 180, 1);
+    renderPath = startRenderPath({}, document.querySelector("#renderPathCanvas")[0], document.querySelector('#timeSlider'), 'js', function (renderPath) {
+        fetch("logo-gcode.txt").then((response) => response.text()).then((text) => {
+            renderPath.fillPathBuffer(jscut.parseGcode({}, text), 0, .125, 180, 1);
         });
     });
 }
