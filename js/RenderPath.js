@@ -284,8 +284,8 @@ function RenderPath(options, canvas, shaderDir, shadersReady) {
     var needToDrawHeightMap = false;
     var requestFrame;
 
-    var gpuMem = 2 * 1024 * 1024;
-    var resolution = 1024;
+    var gpuMem = 2 * 1024 * 1024; //This limits total length of toolpath (as represented in gpu buffer)
+    var resolution = 1024; //This sets resolution of heightmap (eg. level of detail in XY plane)
     var cutterDia = .125;
     var cutterAngleRad = Math.PI;
     var isVBit = false;
