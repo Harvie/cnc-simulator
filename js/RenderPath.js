@@ -237,9 +237,9 @@ void main(void) {
     vec3 tp = getPos(thisPos);
 
     //COLOR OF STOCK MATERIAL
-    vec4 topColor = vec4(1.0, 1.0, 1.0, 1.0);
-    vec4 botColor = vec4(0.0, 0.0, 1.0, 1.0);
-    vec4 transitionColor = vec4(0.0, 0.0, 0.0, 1.0);
+    vec4 topColor = vec4(0.9, 0.9, 1.0, 1.0);
+    vec4 botColor = vec4(0.0, 0.0, 0.4, 1.0);
+    vec4 transitionColor = vec4(0.0, 0.0, 0.6, 1.0);
 
     float transition = min(.4, 100.0*max(abs(p0.z-p1.z), abs(p0.z-p2.z)));
     color = mix(topColor, botColor, tp.z);
